@@ -34,11 +34,11 @@ class SocketClient {
 
   private registerCoreEvents() {
     this.socket?.on("connect", () => {
+      console.log(" Socket connected.");
       this.reconnectAttempts = 0;
-      console.log(`✅ Socket connected: ${this.socket?.id}`);
       this.resubscribeListeners();
 
-      // 🔥 flush queued emits
+      //  flush queued emits
       this.emitQueue.forEach(({ event, args }) => {
         this.socket?.emit(event, ...args);
       });
@@ -46,14 +46,14 @@ class SocketClient {
     });
 
     this.socket?.on("disconnect", (reason) => {
-      console.log("❌ Socket disconnected:", reason);
+      console.log(" Socket disconnected.");
     });
 
     this.socket?.on("connect_error", (err) => {
-      console.warn("⚠️ Socket connect error:", err.message);
+      console.warn("Socket connect error:", err.message);
       this.reconnectAttempts++;
       if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-        console.error("🚨 Max reconnection attempts reached!");
+        console.error("Max reconnection attempts reached!");
       }
     });
   }
@@ -62,7 +62,7 @@ class SocketClient {
     if (this.socket?.connected) {
       this.socket.emit(event, ...args);
     } else {
-      console.warn(`⚠️ Socket not connected, queueing emit: ${event}`);
+      console.warn(`Socket not connected, queueing emit: ${event}`);
       this.emitQueue.push({ event, args });
     }
   }

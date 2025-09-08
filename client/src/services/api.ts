@@ -1,45 +1,41 @@
 import client from "@/lib/api";
 import { API_ROUTES } from "@/config/api";
-import type {User, Doc,Chat } from "@/types"
+import type { User, Doc, Chat } from "@/types";
+import { handleApiResponse } from "@/lib/apiHandler";
 
 export const apiService = {
   // ---- AUTH ----
-  login: async (username: string) => {
-    const res = await client.post<User>(API_ROUTES.auth.login, { username });
-    return res.data;
-  },
+  login: (username: string) =>
+    handleApiResponse<User>(
+      client.post(API_ROUTES.auth.login, { username })
+    ),
 
   // ---- DOCUMENTS ----
-  getDocuments: async (userId:string) => {
-    const res = await client.get<Doc[]>(`${API_ROUTES.documents.list}?userId=${userId}`);
-    return res.data;
-  },
+  getDocuments: (userId: string) =>
+    handleApiResponse<Doc[]>(
+      client.get(`${API_ROUTES.documents.list}?userId=${userId}`)
+    ),
 
-  createDocument: async (title: string, authorId: string) => {
-    const res = await client.post<Doc>(API_ROUTES.documents.create, {
-      title,
-      authorId,
-    });
-    return res.data;
-  },
+  createDocument: (title: string, authorId: string) =>
+    handleApiResponse<Doc>(
+      client.post(API_ROUTES.documents.create, { title, authorId })
+    ),
 
-  updateTitle: async (id: string, title: string) => {
-    const res = await client.put<Doc>(API_ROUTES.documents.byId(id), {
-      title,
-    });
-    return res.data;
-  },
+  updateTitle: (id: string, title: string) =>
+    handleApiResponse<Doc>(
+      client.put(API_ROUTES.documents.byId(id), { title })
+    ),
 
-  getDocument: async (id: string, userId:string) => {
-    const res = await client.get<Doc>(`${API_ROUTES.documents.byId(id)}?userId=${userId}`);
-    const docData = res.data;
-    if(!docData?.id) throw new Error("Unable to fetch Doc")
-    return docData;
-  },
+  getDocument: (id: string, userId: string) =>
+    handleApiResponse<Doc>(
+      client.get(`${API_ROUTES.documents.byId(id)}?userId=${userId}`)
+    ),
 
   // ---- CHAT ----
-  getChatMessages: async (docId: string, before?:string) => {
-    const res = await client.get<Chat[]>(API_ROUTES.chat.byDocId(docId));
-    return res.data;
-  },
+  getChatMessages: (docId: string, before?: string) =>
+    handleApiResponse<Chat[]>(
+      client.get(API_ROUTES.chat.byDocId(docId), {
+        params: before ? { before } : {},
+      })
+    ),
 };

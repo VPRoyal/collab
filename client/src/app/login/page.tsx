@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { User } from "lucide-react";
 import { apiService } from "@/services/api";
@@ -17,8 +21,11 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    setUsername("");
-  }, []);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      router.replace("/docs");
+    }
+  }, [router]);
 
   const handleJoinCollaboration = async () => {
     if (!username.trim()) {
@@ -28,13 +35,17 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
+
       const user = await apiService.login(username.trim());
+
+      if (!user) throw new Error("No user returned");
 
       localStorage.setItem("user", JSON.stringify(user));
       toast.success(`Welcome ${username}!`);
 
-      router.push("/docs");
+      router.replace("/docs");
     } catch (error) {
+      console.error(error);
       toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
@@ -48,7 +59,9 @@ export default function LoginPage() {
           <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
             <User className="w-8 h-8 text-blue-600" />
           </div>
-          <CardTitle className="text-2xl font-semibold">Welcome to CollabWrite</CardTitle>
+          <CardTitle className="text-2xl font-semibold">
+            Welcome to Collab
+          </CardTitle>
           <CardDescription className="text-muted-foreground">
             Enter your username to start collaborating
           </CardDescription>
