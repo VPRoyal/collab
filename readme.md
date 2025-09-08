@@ -19,7 +19,7 @@
 - Integrated real-time **chat sidebar**.  
 - Server-authoritative CRDT model with persistence to PostgreSQL.
 
-### 🌐 **Live Demo**: [Demo Video Link](https://collab-client.onrender.com/)  
+### 🌐 **Live Demo**: [Demo URL](https://collab-client.onrender.com/)  
 - **Note:** This application is deployed on Render. After periods of inactivity, the first request may take a little longer to load as the server restarts.
 
 ### 📸 **Screenshots & Demo**
