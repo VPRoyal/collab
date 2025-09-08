@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // Or a more recent ES version, e.g., "ESNext"
+    "module": "NodeNext", // Enables both CommonJS and ES Modules
+    "moduleResolution": "NodeNext", // Mimics Node.js module resolution
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["./node_modules/@types", "src/shared/types"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "outDir": "./dist",
+    "rootDir": "."
+  },
+  "include": ["**/*.ts", "src/shared/types", "prisma/**/*.prisma"],
+  "exclude": ["node_modules", "dist"]
+}

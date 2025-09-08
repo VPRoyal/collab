@@ -1,0 +1,14 @@
+model Document {
+  id        String   @id @default(uuid())
+  title     String   
+  content  String? @db.Text   // For plain text
+  state    Bytes?
+  authorId String
+  author    User             @relation("AuthorDocs", fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chat Chat[]
+  editors   DocEditor[]
+
+    @@map("documents")
+}

@@ -1,0 +1,13 @@
+model DocEditor {
+  id         String   @id @default(uuid())
+  documentId String
+  userId     String
+
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, userId])
+  @@map("document_editors")
+  @@index([documentId])
+  @@index([userId])
+}
