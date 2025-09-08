@@ -1,7 +1,7 @@
-# CollabWrite ✍️🔗  
+# Collab ✍️🔗  
 *A real-time collaborative document editor with chat & presence — powered by Y.js, Next.js, and Socket.IO.*
 
-![CollabWrite Banner](./docs/screenshots/banner.png)  
+![Collab Banner](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757361106/Screenshot_2025-09-09_012128_gcizem.png)  
 
 [![Next.js](https://img.shields.io/badge/Next.js-13-black?style=flat&logo=next.js)](https://nextjs.org/)  
 [![Socket.IO](https://img.shields.io/badge/Socket.io-Realtime-blue?logo=socket.io)](https://socket.io/)  
@@ -19,8 +19,26 @@
 - Integrated real-time **chat sidebar**.  
 - Server-authoritative CRDT model with persistence to PostgreSQL.
 
-🌐 **Live Demo**: [Demo Video Link](#)  
-📸 **Screenshots**: [Screenshot Collection](#)
+### 🌐 **Live Demo**: [Demo Video Link](https://collab-client.onrender.com/)  
+- **Note:** This application is deployed on Render. After periods of inactivity, the first request may take a little longer to load as the server restarts.
+
+### 📸 **Screenshots & Demo**
+
+Here’s a preview of **Collab** in action:  
+
+| Login / User | Document List |
+|--------------|---------------|
+| ![Login](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_010940_vyckxb.png) | ![Docs List](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011318_apxau0.png) |
+
+| Document Grid View | Chat Sidebar |
+|--------------------|-------------|
+| ![Docs Grid](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011133_rvrlmm.png) | ![Editor](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011405_eou8kr.png) |
+
+| Editor View | Presence & Awareness |
+|----------------------|--------------|
+| ![Presence](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011302_z9rbjh.png) | ![Chat](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011527_iwea2t.png) |
+
+### 🎥 **Demo Video** (Coming Soon): [Watch Here](#)
 
 ---
 
@@ -183,18 +201,6 @@ NEXT_PUBLIC_WS_URL=http://localhost:4000
   - Throttled save (2s debounce) → encode state → store in PostgreSQL.  
 - **Chat** → DB table, persisted per message, broadcast immediately.  
 - **Presence** → Redis ephemeral `doc:{docId}:active` sets, cleared on restart.  
-
----
-
-## 📸 Screenshots & Demo
-
-- **Document List**  
-  ![Docs List](./docs/screenshots/docs-list.png)  
-
-- **Editor with Awareness + Chat**  
-  ![Editor](./docs/screenshots/doc-editor.png)  
-
-🎥 **Demo Video**: [Watch Here](#)  
 
 ---
 
