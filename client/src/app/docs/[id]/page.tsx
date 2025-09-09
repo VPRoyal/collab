@@ -18,7 +18,7 @@ export default function DocumentEditorPage() {
   const [user, setUser] = useState<any>(null);
   const [provider, setProvider] = useState<YSocketIOProvider | null>(null);
   const [ydoc] = useState(() => new Y.Doc());
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false); // default hidden on mobile
   const [doc, setDoc] = useState<Doc | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -28,7 +28,6 @@ export default function DocumentEditorPage() {
   useEffect(() => {
     let prov: YSocketIOProvider | null = null;
     const init = async () => {
-      console.log("Init run");
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
         router.push("/login");
@@ -44,15 +43,11 @@ export default function DocumentEditorPage() {
       setDoc(docData);
 
       const color = randomColor({ luminosity: "dark" });
-      prov = new YSocketIOProvider(
-        params.id as string,
-        ydoc,
-        {
-          id: parsed.id,
-          name: parsed.username,
-          color,
-        },
-      );
+      prov = new YSocketIOProvider(params.id as string, ydoc, {
+        id: parsed.id,
+        name: parsed.username,
+        color,
+      });
       prov.onStatusChange((status) => setIsConnected(status));
       setProvider(prov);
     };
@@ -65,24 +60,27 @@ export default function DocumentEditorPage() {
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="border-b bg-card px-6 py-3 flex justify-between items-center">
-        <div className="flex items-center gap-4">
+      <header className="border-b bg-card px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => router.push("/docs")}
+            className="shrink-0"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back
+            <ArrowLeft className="w-4 h-4 mr-1" /> Back
           </Button>
-          <div>
-            <h1 className="font-semibold text-lg">{doc.title}</h1>
+          <div className="truncate">
+            <h1 className="font-semibold text-lg truncate max-w-[200px] sm:max-w-xs md:max-w-md">
+              {doc.title}
+            </h1>
             <p className="text-xs text-muted-foreground">
               Last updated {new Date(doc.updatedAt).toLocaleString()}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 shrink-0">
           <Badge
             variant="secondary"
             className={`flex items-center ${
@@ -105,32 +103,42 @@ export default function DocumentEditorPage() {
             variant="ghost"
             size="sm"
             onClick={() => setShowChat((prev) => !prev)}
+            className="ml-2"
           >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            {showChat ? "Hide Chat" : "Show Chat"}
+            <MessageCircle className="w-4 h-4 mr-1" />
+            <span className="hidden sm:inline">
+              {showChat ? "Hide Chat" : "Show Chat"}
+            </span>
           </Button>
         </div>
       </header>
 
       {/* Main */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         {/* Editor */}
         <div className="flex-1 overflow-auto">
           <TextEditor docId={params.id as string} provider={provider} />
         </div>
 
-        {/* Chat */}
-        <div
-          className={`transition-all duration-300 ease-in-out ${
-            showChat ? "w-96" : "w-0"
-          } border-l bg-card overflow-hidden flex-shrink-0`}
-        >
-          <ChatPanel
-            provider={provider}
-            user={user}
-            initialChats={doc.chat}
-          />
-        </div>
+        {/* Chat Panel (Overlay on mobile, side panel on desktop) */}
+        {showChat && (
+          <div
+            className={`
+              transition-all duration-300 ease-in-out
+              bg-card border-l
+              fixed md:static inset-0 z-20 md:z-auto
+              w-full md:w-96 flex-shrink-0
+              flex flex-col
+            `}
+          >
+            <ChatPanel
+              provider={provider}
+              user={user}
+              initialChats={doc.chat}
+              onClose={() => setShowChat(false)} // allow mobile close
+            />
+          </div>
+        )}
       </div>
     </div>
   );
