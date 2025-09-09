@@ -22,7 +22,11 @@
 ### 🌐 **Live Demo**: [Demo URL](https://collab-client.onrender.com/)  
 - **Note:** This application is deployed on Render. After periods of inactivity, the first request may take a little longer to load as the server restarts.
 
-### 📸 **Screenshots & Demo**
+### 🎥 **Demo Video**: [Watch Here](https://www.loom.com/share/43386bde795a4b91a75e36ba34a89e1c?sid=108c30c1-6b2c-4de9-a385-9c9475fc6843)
+
+[![Watch the demo](https://cdn.loom.com/sessions/thumbnails/43386bde795a4b91a75e36ba34a89e1c-d23fe9f18e237655-full-play.gif)](https://www.loom.com/share/43386bde795a4b91a75e36ba34a89e1c?sid=108c30c1-6b2c-4de9-a385-9c9475fc6843)
+
+### 📸 **Demo Screenshots**
 
 Here’s a preview of **Collab** in action:  
 
@@ -37,8 +41,6 @@ Here’s a preview of **Collab** in action:
 | Editor View | Presence & Awareness |
 |----------------------|--------------|
 | ![Presence](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011302_z9rbjh.png) | ![Chat](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757360864/Screenshot_2025-09-09_011527_iwea2t.png) |
-
-### 🎥 **Demo Video** (Coming Soon): [Watch Here](#)
 
 ---
 
