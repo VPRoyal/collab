@@ -1,7 +1,7 @@
 # Collab ✍️🔗  
 *A real-time collaborative document editor with chat & presence — powered by Y.js, Next.js, and Socket.IO.*
 
-![Collab Banner](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757361106/Screenshot_2025-09-09_012128_gcizem.png)  
+![Collab Banner](https://res.cloudinary.com/dg68nuxzw/image/upload/v1757397686/Screenshot_2025-09-09_113002_skh8vn.png)  
 
 [![Next.js](https://img.shields.io/badge/Next.js-13-black?style=flat&logo=next.js)](https://nextjs.org/)  
 [![Socket.IO](https://img.shields.io/badge/Socket.io-Realtime-blue?logo=socket.io)](https://socket.io/)  
