@@ -29,8 +29,9 @@ export function ActiveUsers({
 
       // Collect per-session awareness info
       const sessionUsers = states
-        .filter((s) => s?.user)
-        .map((s) => ({
+        .filter(([_, s]) => s?.user)
+        .map(([clientId, s]) => ({
+          clientId,
           id: s.user.id,
           name: s.user.name,
           color: s.user.color,

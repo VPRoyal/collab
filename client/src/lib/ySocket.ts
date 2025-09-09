@@ -34,7 +34,7 @@ export class YSocketIOProvider {
     /** --- Socket Handlers --- **/
     const handleConnect = () => {
       this.setConnection(true);
-      socketClient.emit("doc:join", this.docId);
+      socketClient.emit("doc:join", this.docId, this.awareness.clientID);
       this.restoreAwareness(user);
     };
 
@@ -156,6 +156,7 @@ export class YSocketIOProvider {
   }
 
   destroy() {
+    console.log("Is it called?")
     this.awareness.setLocalState(null);
     this.ydoc.destroy();
     this.awareness.destroy();
