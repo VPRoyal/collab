@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { User } from "lucide-react";
-import clsx from "clsx";
 
 export function ActiveUsers({
   awareness,
@@ -26,8 +25,6 @@ export function ActiveUsers({
   useEffect(() => {
     const update = () => {
       const states = Array.from(awareness.getStates().values()) as any[];
-
-      // Collect per-session awareness info
       const sessionUsers = states
         .filter((s) => s?.user)
         .map((s) => ({
@@ -35,33 +32,27 @@ export function ActiveUsers({
           name: s.user.name,
           color: s.user.color,
         }));
-
       setUsers(sessionUsers);
     };
     awareness.on("update", update);
     update();
-    return () => {
-      awareness.off("update", update);
-    };
+    return () => awareness.off("update", update);
   }, [awareness]);
 
-  // Group users by ID to detect duplicates
   const grouped = users.reduce((acc: Record<string, any>, user) => {
-    if (!acc[user.id]) {
-      acc[user.id] = { ...user, sessions: 1 };
-    } else {
-      acc[user.id].sessions += 1;
-    }
+    if (!acc[user.id]) acc[user.id] = { ...user, sessions: 1 };
+    else acc[user.id].sessions += 1;
     return acc;
   }, {});
-
   const uniqueUsers = Object.values(grouped);
 
   return (
     <>
       <TooltipProvider>
-        {/* Active avatars row */}
-        <div className="flex -space-x-2 cursor-pointer" onClick={() => setOpen(true)}>
+        <div
+          className="flex -space-x-2 cursor-pointer overflow-x-auto max-w-[120px] sm:max-w-none"
+          onClick={() => setOpen(true)}
+        >
           {uniqueUsers.map((u: any) => (
             <Tooltip key={u.id}>
               <TooltipTrigger asChild>
@@ -74,7 +65,6 @@ export function ActiveUsers({
                       {u.name[0]?.toUpperCase() || "?"}
                     </AvatarFallback>
                   </Avatar>
-                  {/* Session count badge if >1 */}
                   {u.sessions > 1 && (
                     <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1 rounded-full border border-white">
                       ×{u.sessions}
@@ -90,12 +80,12 @@ export function ActiveUsers({
         </div>
       </TooltipProvider>
 
-      {/* Dialog for detailed view */}
+      {/* Modal for details */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <User className="w-4 h-4" /> Active Users ({users.length} sessions)
+                            <User className="w-4 h-4" /> Active Users ({users.length} sessions)
             </DialogTitle>
           </DialogHeader>
 

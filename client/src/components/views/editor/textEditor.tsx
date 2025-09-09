@@ -32,7 +32,7 @@ function createYjsExtension(provider: YSocketIOProvider) {
 
         const label = document.createElement("div");
         label.style.position = "absolute";
-        label.style.transform = "translateY(-100%)"; // float exactly above caret
+        label.style.transform = "translateY(-100%)";
         label.style.background = color;
         label.style.color = "white";
         label.style.fontSize = "0.65rem";
@@ -46,7 +46,6 @@ function createYjsExtension(provider: YSocketIOProvider) {
         return caret;
       };
 
-      // The y-prosemirror plugins are stateful — return them via addProseMirrorPlugins
       return [
         ySyncPlugin(type),
         yCursorPlugin(provider.awareness, { cursorBuilder }),
@@ -59,20 +58,18 @@ function createYjsExtension(provider: YSocketIOProvider) {
 export function TextEditor({ docId, provider }: TextEditorProps) {
   const extensions = useMemo(() => {
     const base = [StarterKit];
-    if (provider) {
-      base.push(createYjsExtension(provider));
-    }
+    if (provider) base.push(createYjsExtension(provider));
     return base;
   }, [provider]);
 
   const editor = useEditor({
     extensions,
-    autofocus:true,
-    immediatelyRender: false, 
+    autofocus: true,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm max-w-none outline-none min-h-[600px] focus:outline-none p-6",
+          "prose prose-sm sm:prose max-w-none outline-none min-h-[calc(100vh-150px)] sm:min-h-[600px] focus:outline-none p-4 sm:p-6",
       },
     },
   });
@@ -80,7 +77,7 @@ export function TextEditor({ docId, provider }: TextEditorProps) {
   useEffect(() => {
     if (!editor || !provider) return;
 
-    const updateCursor=throttle(({ editor }: any) => {
+    const updateCursor = throttle(({ editor }: any) => {
       const { from, to, empty } = editor.state.selection;
       provider.setCursor(empty ? null : { from, to });
     }, 50);
@@ -106,7 +103,7 @@ export function TextEditor({ docId, provider }: TextEditorProps) {
   if (!editor) return null;
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-white overflow-y-auto">
       <EditorContent editor={editor} />
     </div>
   );

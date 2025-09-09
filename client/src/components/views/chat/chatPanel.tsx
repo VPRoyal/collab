@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Send } from "lucide-react";
+import { Send, X } from "lucide-react";
 import { YSocketIOProvider } from "@/lib/ySocket";
 import type { Chat } from "@/types";
 
@@ -12,15 +12,21 @@ interface ChatPanelProps {
   provider: YSocketIOProvider;
   user: { id: string; username: string; color: string };
   initialChats?: Chat[];
+  onClose?: () => void; // mobile overlay close
 }
 
-export function ChatPanel({ provider, user, initialChats = [] }: ChatPanelProps) {
-  const [messages, setMessages] = useState<Chat[]>(initialChats);
+export function ChatPanel({
+  provider,
+  user,
+  initialChats = [],
+  onClose,
+}: ChatPanelProps) {
+  const [messages, setMessages] = useState<Chat[]>(initialChats.slice().reverse());
   const [newMessage, setNewMessage] = useState("");
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Listen for new chat messages from socket provider
+  // Listen for new chat messages
   useEffect(() => {
     const off = provider.onChatMessage((msg) => {
       setMessages((prev) => [...prev, msg]);
@@ -28,14 +34,16 @@ export function ChatPanel({ provider, user, initialChats = [] }: ChatPanelProps)
     return () => off();
   }, [provider]);
 
-  // Auto-scroll to last message
+  // Auto-scroll
   useEffect(() => {
     if (messages.length > 0) {
-      document.getElementById("last-message")?.scrollIntoView({ behavior: "smooth" });
+      document
+        .getElementById("last-message")
+        ?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
-  // Send a new message
+  // Send message
   const handleSendMessage = () => {
     if (!newMessage.trim()) return;
     provider.sendChatMessage(newMessage, {
@@ -75,7 +83,21 @@ export function ChatPanel({ provider, user, initialChats = [] }: ChatPanelProps)
       {/* Header */}
       <div className="p-4 border-b flex justify-between items-center">
         <h3 className="font-medium text-lg">Chat</h3>
-        <span className="text-xs text-muted-foreground">{messages.length} messages</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground hidden md:block">
+            {messages.length} messages
+          </span>
+          {onClose && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={onClose}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -129,7 +151,6 @@ export function ChatPanel({ provider, user, initialChats = [] }: ChatPanelProps)
           );
         })}
 
-        {/* No messages fallback */}
         {messages.length === 0 && (
           <p className="text-center text-sm text-muted-foreground mt-10">
             No messages yet. Start the conversation!
@@ -145,7 +166,7 @@ export function ChatPanel({ provider, user, initialChats = [] }: ChatPanelProps)
         </div>
       )}
 
-      {/* Input Box */}
+      {/* Input */}
       <div className="p-4 border-t flex gap-2">
         <Input
           placeholder="Type a message..."
