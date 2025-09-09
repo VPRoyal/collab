@@ -34,30 +34,11 @@ const normalizeToUint8 = (payload: any): Uint8Array => {
   return new Uint8Array(Object.values(payload));
 };
 
-const hasContent = (fragment: Y.XmlFragment): boolean => {
-  if (!fragment) return false;
-  const containsText = (node: any): boolean => {
-    if (node instanceof Y.XmlText) {
-      return node.toString().replace(/\s|\u00A0/g, "").length > 0;
-    }
-    if (node instanceof Y.XmlElement || node instanceof Y.XmlFragment) {
-      return node.toArray().some(containsText);
-    }
-    return false;
-  };
-  return fragment.toArray().some(containsText);
-};
-
 /* Throttle DB persistence */
 const throttleDocSave = (docId: string, ydoc: Y.Doc) => {
   if (docSaveTimers[docId]) return;
   docSaveTimers[docId] = setTimeout(async () => {
     try {
-      const fragment = ydoc.getXmlFragment("prosemirror");
-      if (!hasContent(fragment)) {
-        delete docSaveTimers[docId];
-        return;
-      }
       const update = Y.encodeStateAsUpdate(ydoc);
       await updateDoc(docId, { state: Buffer.from(update) });
       logger.info("doc:saved", { docId });
@@ -65,7 +46,7 @@ const throttleDocSave = (docId: string, ydoc: Y.Doc) => {
       logger.error("doc:save_failed", { docId, err });
     }
     delete docSaveTimers[docId];
-  }, 2000);
+  }, 5000);
 };
 
 /* ----------------------------
